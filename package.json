@@ -1,8 +1,8 @@
 {
-  "name": "typescript-action",
+  "name": "up-bank-to-google-sheets",
   "version": "0.0.0",
   "private": true,
-  "description": "TypeScript template action",
+  "description": "Push Up Bankd transactions to a Google sheet",
   "main": "lib/main.js",
   "scripts": {
     "build": "tsc",
@@ -15,7 +15,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/actions/typescript-action.git"
+    "url": "git+https://github.com/y-a-n-n/UpBankToGoogleSheets.git"
   },
   "keywords": [
     "actions",
@@ -25,7 +25,11 @@
   "author": "",
   "license": "MIT",
   "dependencies": {
-    "@actions/core": "^1.10.0"
+    "@actions/core": "^1.10.0",
+    "@google-cloud/local-auth": "^2.1.0",
+    "axios": "^1.2.1",
+    "google-auth-library": "^8.7.0",
+    "googleapis": "^105.0.0"
   },
   "devDependencies": {
     "@types/node": "^18.11.0",

@@ -1,6 +1,37 @@
-<p align="center">
-  <a href="https://github.com/actions/typescript-action/actions"><img alt="typescript-action status" src="https://github.com/actions/typescript-action/workflows/build-test/badge.svg"></a>
-</p>
+# Stages
+
+## Stage 1: Fetch transactions for a single month and push to a single sheet
+
+- Create function that pulls transactions from Up API for a single month
+- Create function that pushes those transactions to a fixed single sheet in a Google spreadsheet
+
+## Stage 2: JIT create sheets for new months with data
+
+- Create new sheet if required
+- Push data to correct sheet
+- ? Duplicate old sheet to preserve formatting and charts
+- ? Allow number of months to look back and update to be configured
+
+## Stage 3: Execute on a CRON
+
+- Execute github action on a daily CRON
+
+# Prerequisites
+
+## Google Sheets
+
+- A GCP project with the Sheets API enabled
+- [A service account credential](https://cloud.google.com/nodejs/docs/reference/google-auth-library/latest#download-your-service-account-credentials-json-file)
+
+See the [Google Sheets API Quickstart for more info](https://developers.google.com/sheets/api/quickstart/js#prereqs)
+
+- A Google sheet you want to use. 
+
+Invite the user principal for your GCP service account as an editor of the Google sheet.
+
+## Up Bank
+
+An [Up Bank access token](https://developer.up.com.au/#getting-started)
 
 # Create a JavaScript Action using TypeScript
 

@@ -1,11 +1,21 @@
-name: 'Your name here'
-description: 'Provide a description here'
-author: 'Your name or organization here'
+name: 'Up Bank to Google Sheets'
+description: 'Synchronises Up Bank transaction data to Google Sheets'
+author: 'Yann Frizenschaf'
 inputs:
-  milliseconds: # change this
+  syncFromDate:
     required: true
-    description: 'input description here'
-    default: 'default value if applicable'
+    description: 'Earliest date to sync transactions from'
+    default: '2022-10-01T00:00:00.000Z'
+  upApiKey:
+    required: true
+    description: 'Read-only API key for Up Bank'
+    default: ${{ secrets.UP_BANK_API_KEY }}
+  googleSpreadsheetId:
+    required: true
+    description: 'ID of Google Sheet to sync data to'
+    default: ${{ secrets.GOOGLE_SPREADSHEET_ID }}
 runs:
+  pre: |
+      mkdir -p .keys && echo ${{ secrets.GOOGLE_API_KEY_ENC }} | base64 -d > .keys/gapikey.json
   using: 'node16'
   main: 'dist/index.js'
