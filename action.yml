@@ -9,13 +9,11 @@ inputs:
   upApiKey:
     required: true
     description: 'Read-only API key for Up Bank'
-    default: ${{ secrets.UP_BANK_API_KEY }}
+    default: ''
   googleSpreadsheetId:
     required: true
     description: 'ID of Google Sheet to sync data to'
-    default: ${{ secrets.GOOGLE_SPREADSHEET_ID }}
+    default: ''
 runs:
-  pre: |
-      mkdir -p .keys && echo ${{ secrets.GOOGLE_API_KEY_ENC }} | base64 -d > .keys/gapikey.json
   using: 'node16'
   main: 'dist/index.js'
