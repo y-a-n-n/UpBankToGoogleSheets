@@ -19,7 +19,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - run: |
-          pwd && mkdir -p ./.keys && echo ${{ secrets.GOOGLE_API_KEY_ENC }} | base64 -d > ./.keys/gapikey.json && ;s ./.keys
+          pwd && mkdir -p ./.keys && echo ${{ secrets.GOOGLE_API_KEY_ENC }} | base64 -d > ./.keys/gapikey.json && ls ./.keys
       - uses: ./
         with:
           upApiKey: ${{ secrets.UP_BANK_API_KEY }}
