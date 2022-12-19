@@ -33,7 +33,7 @@ export default class UpBankUtil {
       `https://api.up.com.au/api/v1/transactions?filter[since]=${date.toISOString()}`,
       {
         headers: {
-          Authorization: 'Bearer x',
+          Authorization: `Bearer ${this._upBankApiKey}`,
         },
       }
     );
