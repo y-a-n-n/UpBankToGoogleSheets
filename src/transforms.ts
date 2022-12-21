@@ -11,10 +11,10 @@ export function flattenTransaction(
   transaction: Transaction
 ): FlattenedTransaction {
   return {
-    date: transaction.attributes.settledAt,
-    amount: transaction.attributes.amount.value,
-    desc: transaction.attributes.description,
-    category: transaction.relationships.category.data.id,
+    date: transaction?.attributes?.settledAt,
+    amount: transaction?.attributes?.amount?.value,
+    desc: transaction?.attributes?.description,
+    category: transaction?.relationships?.category?.data?.id,
   };
 }
 
