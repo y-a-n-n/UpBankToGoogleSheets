@@ -2,7 +2,7 @@ import {Transaction} from './up-bank-util';
 
 export interface FlattenedTransaction {
   date: Date;
-  amount: string;
+  amount: number;
   desc: string;
   category: string;
 }
@@ -11,8 +11,8 @@ export function flattenTransaction(
   transaction: Transaction
 ): FlattenedTransaction {
   return {
-    date: transaction?.attributes?.settledAt,
-    amount: transaction?.attributes?.amount?.value,
+    date: new Date(transaction?.attributes?.settledAt),
+    amount: Number(transaction?.attributes?.amount?.value),
     desc: transaction?.attributes?.description,
     category: transaction?.relationships?.category?.data?.id,
   };
@@ -21,7 +21,7 @@ export function flattenTransaction(
 function getTransactionMonth(
   flattenedTransaction: FlattenedTransaction
 ): string {
-  return `${flattenedTransaction.date.getFullYear()}-${flattenedTransaction.date.getMonth()}`;
+  return `${flattenedTransaction.date?.getFullYear()}-${flattenedTransaction.date.getMonth()}`;
 }
 
 export function flattenAndSplitTransactionsByMonth(
