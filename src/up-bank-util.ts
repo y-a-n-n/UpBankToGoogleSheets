@@ -10,7 +10,7 @@ export interface Transaction {
       currencyCode: string;
       value: string;
     };
-    settledAt: string;
+    createdAt: string;
   };
   relationships: {
     category: {
