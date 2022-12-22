@@ -51,10 +51,10 @@ export default class GoogleSheetsUtil {
     return 0;
   }
 
-  private async getOrCreateSheetForDate(date: Date): Promise<string> {
+  private async getOrCreateSheetForDate(date: string): Promise<string> {
     core.info(`getOrCreateSheetForDate ${date}`);
     const existingSheets = await this.getExistingSheets();
-    const targetSheetName = date.toISOString().substring(0, 7);
+    const targetSheetName = date.substring(0, 7);
     const targetSheet = existingSheets?.find(
       sheet => sheet.properties?.title === targetSheetName
     );
