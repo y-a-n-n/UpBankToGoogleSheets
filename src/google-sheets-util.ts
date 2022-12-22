@@ -80,6 +80,7 @@ export default class GoogleSheetsUtil {
     await this._sheets?.spreadsheets.values.update({
       spreadsheetId: this._spreadsheetId,
       range: rangeToWrite,
+      valueInputOption: 'USER_ENTERED',
       requestBody: {
         values: rows,
       },
