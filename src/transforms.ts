@@ -1,3 +1,4 @@
+import * as core from '@actions/core';
 import {Transaction} from './up-bank-util';
 
 export interface FlattenedTransaction {
@@ -31,10 +32,13 @@ export function flattenAndSplitTransactionsByMonth(
   const months = flattened.map(getTransactionMonth);
   const transactionsByMonth: FlattenedTransaction[][] = [];
   for (const m of months) {
+    core.info(`Flattening month ${m}`);
     const transactionsForMonth = flattened.filter(f => {
       return getTransactionMonth(f) === m;
     });
+    core.info(`Transactions this month ${transactionsForMonth.length}`);
     transactionsByMonth.push(transactionsForMonth);
   }
+  core.info(`Found ${transactionsByMonth.length} months of transactions`);
   return transactionsByMonth;
 }
