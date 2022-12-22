@@ -30,8 +30,9 @@ export function flattenAndSplitTransactionsByMonth(
 ): FlattenedTransaction[][] {
   const flattened = transactions.map(flattenTransaction);
   const months = flattened.map(getTransactionMonth);
+  const uniqueMonths = [...new Set(months)];
   const transactionsByMonth: FlattenedTransaction[][] = [];
-  for (const m of months) {
+  for (const m of uniqueMonths) {
     core.info(`Flattening month ${m}`);
     const transactionsForMonth = flattened.filter(f => {
       return getTransactionMonth(f) === m;

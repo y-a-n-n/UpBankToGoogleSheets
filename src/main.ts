@@ -22,7 +22,7 @@ async function run(): Promise<void> {
       new Date(syncFromDate)
     );
 
-    core.info(`Flattening transactions`);
+    core.info(`Flattening ${transactions.length} transactions`);
     const transactionsByMonth =
       flattenAndSplitTransactionsByMonth(transactions);
     await googleSheetsUtil.syncTransactionsToSpreadsheet(transactionsByMonth);
