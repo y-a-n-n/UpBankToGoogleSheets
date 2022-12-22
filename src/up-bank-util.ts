@@ -1,5 +1,5 @@
 import * as core from '@actions/core';
-import axios from 'axios';
+import axios, {AxiosResponse} from 'axios';
 
 // https://developer.up.com.au/#get_transactions
 export interface Transaction {
@@ -27,6 +27,31 @@ export default class UpBankUtil {
   constructor(upBankApiKey: string) {
     this._upBankApiKey = upBankApiKey;
   }
+
+  async transactionsFromResponse(
+    response: AxiosResponse
+  ): Promise<Transaction[]> {
+    const transactions: Transaction[] = [];
+    const value = (await response.data) as {
+      data: Transaction[];
+      links: {next?: string};
+    };
+    transactions.concat(value.data);
+    if (value.links.next) {
+      transactions.concat(await this.followNextLink(value.links.next));
+    }
+    return transactions;
+  }
+
+  async followNextLink(nextLink: string): Promise<Transaction[]> {
+    const response = await axios.get(nextLink, {
+      headers: {
+        Authorization: `Bearer ${this._upBankApiKey}`,
+      },
+    });
+    return this.transactionsFromResponse(response);
+  }
+
   async getTransactionsByMonthSinceDate(date: Date): Promise<Transaction[]> {
     core.info(`Getting transactions since ${date}`);
     const response = await axios.get(
@@ -37,7 +62,6 @@ export default class UpBankUtil {
         },
       }
     );
-    const body = (await response.data) as {data: Transaction[]};
-    return body.data;
+    return this.transactionsFromResponse(response);
   }
 }
