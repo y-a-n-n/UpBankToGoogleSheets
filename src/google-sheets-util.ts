@@ -74,7 +74,7 @@ export default class GoogleSheetsUtil {
       range: `${targetSheetName}!A2:D1000`,
     });
     const numRows = transactions.length;
-    const rangeToWrite = `${targetSheetName}A2:D${numRows + 2}`;
+    const rangeToWrite = `'${targetSheetName}'!A2:D${numRows + 2}`;
     core.info(`rangeToWrite ${rangeToWrite}`);
     const rows = transactions.map(r => [r.date, r.amount, r.desc, r.category]);
     await this._sheets?.spreadsheets.values.update({
