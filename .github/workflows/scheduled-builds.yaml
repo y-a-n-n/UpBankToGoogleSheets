@@ -1,0 +1,25 @@
+name: Trigger daily snyc
+
+on:
+  schedule:
+    # Runs "at minute 55 past every hour" (see https://crontab.guru)
+    - cron: '0 0 * * *'
+jobs:
+  build: # make sure build/ci work properly
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: |
+          npm install
+      - run: |
+          npm run all
+  test: # make sure the action works on a clean machine without building
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: |
+          pwd && mkdir -p ./.keys && echo ${{ secrets.GOOGLE_API_KEY_ENC }} | base64 -d > ./.keys/gapi.json && ls ./.keys
+      - uses: ./
+        with:
+          upApiKey: ${{ secrets.UP_BANK_API_KEY }}
+          googleSpreadsheetId: ${{ secrets.GOOGLE_SPREADSHEET_ID }}

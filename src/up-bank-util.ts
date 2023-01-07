@@ -31,14 +31,16 @@ export default class UpBankUtil {
   async transactionsFromResponse(
     response: AxiosResponse
   ): Promise<Transaction[]> {
-    const transactions: Transaction[] = [];
+    let transactions: Transaction[] = [];
     const value = (await response.data) as {
       data: Transaction[];
       links: {next?: string};
     };
-    transactions.concat(value.data);
+    transactions = transactions.concat(value.data);
     if (value.links.next) {
-      transactions.concat(await this.followNextLink(value.links.next));
+      transactions = transactions.concat(
+        await this.followNextLink(value.links.next)
+      );
     }
     return transactions;
   }
