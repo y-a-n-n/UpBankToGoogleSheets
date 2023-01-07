@@ -1,4 +1,5 @@
 import * as core from '@actions/core';
+// eslint-disable-next-line import/named
 import axios, {AxiosResponse} from 'axios';
 
 // https://developer.up.com.au/#get_transactions
