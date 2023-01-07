@@ -85,7 +85,7 @@ export default class GoogleSheetsUtil {
     core.info(`pushToSheet ${targetSheetName}`);
 
     const startCol = COLS[columnOffset * 4];
-    const endCol = COLS[columnOffset + 3];
+    const endCol = COLS[columnOffset * 4 + 3];
     await this.writeHeader(startCol, endCol);
     await this._sheets?.spreadsheets.values.clear({
       spreadsheetId: this._spreadsheetId,
