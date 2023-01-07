@@ -22,6 +22,7 @@ jobs:
           pwd && mkdir -p ./.keys && echo ${{ secrets.GOOGLE_API_KEY_ENC }} | base64 -d > ./.keys/gapi.json && ls ./.keys
       - uses: ./
         with:
-          upApiKey: ${{ secrets.UP_BANK_API_KEY }}
+          upApiKey1: ${{ secrets.UP_BANK_API_KEY_1 }}
+          upApiKey2: ${{ secrets.UP_BANK_API_KEY_2 }}
           googleSpreadsheetId: ${{ secrets.GOOGLE_SPREADSHEET_ID }}
 

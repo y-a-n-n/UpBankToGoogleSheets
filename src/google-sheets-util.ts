@@ -4,6 +4,8 @@ import {GoogleAuth} from 'google-auth-library';
 import {sheets_v4 as sheets} from 'googleapis';
 import Sheets = sheets.Sheets;
 
+const COLS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+
 export default class GoogleSheetsUtil {
   _spreadsheetId: string;
   _sheets?: Sheets;
@@ -64,17 +66,35 @@ export default class GoogleSheetsUtil {
     return targetSheetName;
   }
 
+  private async writeHeader(startCol: string, endCol: string): Promise<void> {
+    await this._sheets?.spreadsheets.values.update({
+      spreadsheetId: this._spreadsheetId,
+      range: `${startCol}1:${endCol}1`,
+      valueInputOption: 'USER_ENTERED',
+      requestBody: {
+        values: [['Date', 'Amount', 'Merchant', 'Category']],
+      },
+    });
+  }
+
   private async pushToSheet(
     targetSheetName: string,
-    transactions: FlattenedTransaction[]
+    transactions: FlattenedTransaction[],
+    columnOffset: number
   ): Promise<void> {
     core.info(`pushToSheet ${targetSheetName}`);
+
+    const startCol = COLS[columnOffset * 4];
+    const endCol = COLS[columnOffset + 3];
+    await this.writeHeader(startCol, endCol);
     await this._sheets?.spreadsheets.values.clear({
       spreadsheetId: this._spreadsheetId,
-      range: `${targetSheetName}!A2:D1000`,
+      range: `${targetSheetName}!${startCol}2:${endCol}1000`,
     });
     const numRows = transactions.length;
-    const rangeToWrite = `'${targetSheetName}'!A2:D${numRows + 2}`;
+    const rangeToWrite = `'${targetSheetName}'!${startCol}2:${endCol}${
+      numRows + 2
+    }`;
     core.info(`rangeToWrite ${rangeToWrite}`);
     const rows = transactions.map(r => [r.date, r.amount, r.desc, r.category]);
     await this._sheets?.spreadsheets.values.update({
@@ -88,13 +108,14 @@ export default class GoogleSheetsUtil {
   }
 
   async syncTransactionsToSpreadsheet(
-    transactionByMonth: FlattenedTransaction[][]
+    transactionByMonth: FlattenedTransaction[][],
+    columnOffset: number
   ): Promise<void> {
     core.info(`transactionByMonth ${transactionByMonth.length}`);
     core.info(`Pushing to spreadsheet ${this._spreadsheetId}`);
     for (const tbm of transactionByMonth) {
       const sheetId = await this.getOrCreateSheetForDate(tbm[0].date);
-      await this.pushToSheet(sheetId, tbm);
+      await this.pushToSheet(sheetId, tbm, columnOffset);
     }
   }
 }
