@@ -6,9 +6,13 @@ inputs:
     required: true
     description: 'Earliest date to sync transactions from'
     default: '2022-10-01T00:00:00.000Z'
-  upApiKey:
+  upApiKey1:
     required: true
-    description: 'Read-only API key for Up Bank'
+    description: 'Read-only API key 1 for Up Bank'
+    default: ''
+  upApiKey2:
+    required: false
+    description: 'Read-only API key 2 for Up Bank'
     default: ''
   googleSpreadsheetId:
     required: true

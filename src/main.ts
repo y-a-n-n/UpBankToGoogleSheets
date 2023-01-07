@@ -39,7 +39,10 @@ async function run(): Promise<void> {
 
     const date = new Date(syncFromDate);
 
-    const accountKeys = [upApiKey1, upApiKey2];
+    const accountKeys = [upApiKey1];
+    if (upApiKey2) {
+      accountKeys.push(upApiKey2);
+    }
     for (const key of accountKeys) {
       const i = accountKeys.indexOf(key);
       await processAccount(key, i, date);
