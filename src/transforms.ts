@@ -15,7 +15,7 @@ export function flattenTransaction(
     date: transaction?.attributes?.createdAt,
     amount: transaction?.attributes?.amount?.value,
     desc: transaction?.attributes?.description,
-    category: transaction?.relationships?.category?.data?.id,
+    category: transaction?.relationships?.category?.data?.id || 'uncategorized',
   };
 }
 
