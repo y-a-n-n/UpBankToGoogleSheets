@@ -1,4 +1,4 @@
-name: Trigger daily snyc
+name: Trigger daily sync
 
 on:
   schedule:

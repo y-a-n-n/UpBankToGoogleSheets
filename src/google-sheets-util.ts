@@ -37,10 +37,13 @@ export default class GoogleSheetsUtil {
     return this._targetSpreadsheet?.sheets;
   }
 
-  private async createSheet(targetSheetName: string): Promise<number> {
+  private async createSheet(
+    targetSheetName: string,
+    sourceSheetId: number
+  ): Promise<number> {
     core.info(`createSheet ${targetSheetName}`);
     const duplicateSheetRequest: sheets.Schema$DuplicateSheetRequest = {
-      sourceSheetId: 0,
+      sourceSheetId,
       insertSheetIndex: 0,
       newSheetName: targetSheetName,
     };
@@ -61,7 +64,9 @@ export default class GoogleSheetsUtil {
       sheet => sheet.properties?.title === targetSheetName
     );
     if (!targetSheet) {
-      await this.createSheet(targetSheetName);
+      const firstSheet = existingSheets![0];
+      const sourceSheetId = firstSheet.properties!.sheetId!;
+      await this.createSheet(targetSheetName, sourceSheetId);
     }
     return targetSheetName;
   }
