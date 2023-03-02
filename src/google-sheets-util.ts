@@ -1,8 +1,9 @@
 import * as core from '@actions/core';
 import {FlattenedTransaction} from './transforms';
-import {GoogleAuth} from 'google-auth-library';
+import {Compute, GoogleAuth} from 'google-auth-library';
 import {sheets_v4 as sheets} from 'googleapis';
 import Sheets = sheets.Sheets;
+import {JSONClient} from 'google-auth-library/build/src/auth/googleauth';
 
 const COLS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
@@ -10,6 +11,7 @@ export default class GoogleSheetsUtil {
   _spreadsheetId: string;
   _sheets?: Sheets;
   _targetSpreadsheet?: sheets.Schema$Spreadsheet;
+  _client?: JSONClient | Compute;
   constructor(spreadsheetId: string) {
     this._spreadsheetId = spreadsheetId;
   }
@@ -22,8 +24,10 @@ export default class GoogleSheetsUtil {
         'https://www.googleapis.com/auth/spreadsheets',
       ],
     });
-    const client = await auth.getClient();
-    this._sheets = new sheets.Sheets({auth: client});
+    this._client = await auth.getClient();
+  }
+  async updateSheetsList(): Promise<void> {
+    this._sheets = new sheets.Sheets({auth: this._client});
     const result = await this._sheets.spreadsheets.get({
       spreadsheetId: this._spreadsheetId,
     });
@@ -64,6 +68,9 @@ export default class GoogleSheetsUtil {
       sheet => sheet.properties?.title === targetSheetName
     );
     if (!targetSheet) {
+      core.info(
+        `Didn't find an existing sheet for month ${targetSheetName}, creating...`
+      );
       const firstSheet = existingSheets![0];
       const sourceSheetId = firstSheet.properties!.sheetId!;
       await this.createSheet(targetSheetName, sourceSheetId);

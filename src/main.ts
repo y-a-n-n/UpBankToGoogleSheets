@@ -45,6 +45,7 @@ async function run(): Promise<void> {
     }
     for (const key of accountKeys) {
       const i = accountKeys.indexOf(key);
+      await googleSheetsUtil.updateSheetsList();
       await processAccount(key, i, date);
     }
   } catch (error) {
