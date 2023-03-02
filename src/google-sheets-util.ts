@@ -1,9 +1,11 @@
 import * as core from '@actions/core';
+
+import {Compute} from 'google-auth-library/build/src/auth/computeclient';
 import {FlattenedTransaction} from './transforms';
-import {Compute, GoogleAuth} from 'google-auth-library';
+import {GoogleAuth} from 'google-auth-library';
+import {JSONClient} from 'google-auth-library/build/src/auth/googleauth';
 import {sheets_v4 as sheets} from 'googleapis';
 import Sheets = sheets.Sheets;
-import {JSONClient} from 'google-auth-library/build/src/auth/googleauth';
 
 const COLS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 
@@ -11,7 +13,7 @@ export default class GoogleSheetsUtil {
   _spreadsheetId: string;
   _sheets?: Sheets;
   _targetSpreadsheet?: sheets.Schema$Spreadsheet;
-  _client?: JSONClient | Compute;
+  _client?: Compute | JSONClient;
   constructor(spreadsheetId: string) {
     this._spreadsheetId = spreadsheetId;
   }
